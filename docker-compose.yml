@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+    web:
+        image: 'nginx:latest'
+        restart: always
+        ports:
+            - '80:80'
+        volumes:
+            - ./logs/access-nginx.log:/var/log/nginx/access.log
+            - ./logs/error-nginx.log:/var/log/nginx/error.log
+            - ./app:/app
+            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+        links:
+            - php
+        networks:
+            - lemp
+    php:
+        image: 'php:fpm'
+        restart: always
+        ports:
+            - '9000:9000'
+        volumes:
+            - ./app:/app
+        networks:
+            - lemp
+    db:
+        image: 'mysql:5.7.24'
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - ./db-data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+        networks:
+            - lemp
+
+    phpmyadmin:
+        image: 'phpmyadmin/phpmyadmin'
+        restart: always
+        ports:
+            - '8080:80'
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            PMA_HOST: db
+        links:
+            - db
+        networks:
+            - lemp
+
+networks:
+    lemp:
+
