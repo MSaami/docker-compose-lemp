@@ -1,7 +1,7 @@
 # Docker Compose For LEMP Stack
 this repository brings LEMP stack with docker compose version 3 
 
-for database test, first you've to install pdo driver into php:fpm container, for this you can run below command :
+for database test, first you must install pdo driver into php:fpm container, for this you can run below command :
 ```
 docker container -exec <containerID> docker-php-ext-install pdo pdo_mysql
 ```
